@@ -50,6 +50,20 @@ app.get('/tour/request-group-rate',function(req,res){
 	res.render('tours/request-group-rate');
 });
 
+app.get('/godKing',function(req,res){
+	res.render('test',{
+		query:{
+			name : 'BettyWong',
+			sex: 'lady'
+		},
+		arr: ['fat','beauty'],
+		list: [
+			{name:'Mario',relation:'husband'},
+			{name:'OldWang',relation:'wife'}
+		],
+		string:"/about"
+	});
+})
 
 
 // 定制404,500

@@ -1,2 +1,25 @@
 <!--hellow1-->
 {{! hellow2}}
+
+<ul>
+    {{#each list}}
+        <li>{{name}} is my {{relation}}</li>
+    {{/each}}
+
+</ul>
+
+{{#unless arr}}
+
+{{else}}
+    <p>my name is {{query.name}},{{query.sex}}</p>
+{{/unless}}
+
+
+{{#if string}}
+    <a href="{{string}}">about me</a>
+    {{#each arr}}
+        {{.}},
+    {{/each}}
+{{else}}
+
+{{/if}}
