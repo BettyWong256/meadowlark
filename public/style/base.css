@@ -1,0 +1,11 @@
+*{
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	font-family: "微软雅黑";
+}
+
+header{
+	background: #2e3c50;
+	text-align: left;
+}

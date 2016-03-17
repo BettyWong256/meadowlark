@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "express": "^4.0.0",
+    "express3-handlebars": "^0.5.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
+  }
+}
