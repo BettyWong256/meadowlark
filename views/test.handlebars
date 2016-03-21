@@ -1,5 +1,11 @@
 <!--hellow1-->
 {{! hellow2}}
+{{#each list}}
+    {{#if ../query}}
+        ({{../../query.name}})
+    {{/if}}
+{{/each}}
+
 
 <ul>
     {{#each list}}
@@ -23,3 +29,4 @@
 {{else}}
 
 {{/if}}
+}}
