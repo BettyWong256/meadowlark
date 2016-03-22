@@ -7,7 +7,18 @@ var app = express();
 
 // 创建视图引擎
 // 指定默认布局{defaultLayout:'main'}，除非特殊指明，不然全用main.handlebars
-var handlebars = require('express3-handlebars').create({defaultLayout:'main'});
+// 特殊指明例：res.render('home',{layout:null/'unmain'})
+var handlebars = require('express3-handlebars').create({
+	defaultLayout:'main',
+	// 段落-实例化是添加section辅助方法(script脚本)
+	helpers:{
+		section: function(name, options){
+			if(!this._sections) this._sections = {};
+			this._sections[name] = options.fn(this);
+			return null;
+		}
+	}
+});
 app.engine('handlebars',handlebars.engine);
 app.set('view engine','handlebars');
 
@@ -23,15 +34,45 @@ app.use(function(req,res,next){
 // 引入基本文件
 app.use(express.static(__dirname + '/public'));
 
+
+// 中间件
+app.use(function(req,res,next){
+	if(!res.locals.partials) res.locals.partials = {};
+	res.locals.partials.weather = fortune.weather();
+	res.locals.partials.weathers = fortune.weather();
+	next();
+})
+
+
+
+
 // 路由
 app.get('/',function(req,res){
 	// res.type('text/plain');
 	// res.send('GodKing');
 	res.render('home');
+});
+
+//-----段落-页面引用js脚本--------------
+app.get('/jqueryTest',function(req,res){
+	// res.type('text/plain');
+	// res.send('GodKing');
+	res.render('jquerytest');
 })
+//------hds客户端-动态加载页面内容--------------
+app.get('/nursery-rhyme',function(req,res){
+	res.render('nursery-rhyme');
+});
 
-
-
+app.get('/data/nursery-rhyme',function(req,res){
+	res.json({
+		animal :'squirrel',
+		bodyPart: 'taile',
+		adjective: 'bushy',
+		noun: 'heck'
+	});
+});
+//---------普通页面controller---------------
 app.get('/about',function(req,res){
 	// res.type('text/plain');
 	// res.send('About GodKing!');
@@ -63,7 +104,8 @@ app.get('/godKing',function(req,res){
 		],
 		string:"/about"
 	});
-})
+});
+
 
 
 // 定制404,500
