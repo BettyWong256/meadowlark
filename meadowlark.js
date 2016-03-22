@@ -41,7 +41,9 @@ app.use(function(req,res,next){
 	res.locals.partials.weather = fortune.weather();
 	res.locals.partials.weathers = fortune.weather();
 	next();
-})
+});
+
+app.use(require('body-parser')());
 
 
 
@@ -72,6 +74,16 @@ app.get('/data/nursery-rhyme',function(req,res){
 		noun: 'heck'
 	});
 });
+
+//---------express表单------------------
+app.get('/newsletter',function(req,res){
+	res.render('newsletter',{csrf:'CSRF token goes here'});
+});
+app.post('/process',function(req,res){
+	console.log('From(from querystring):' + req.query.form);
+	console.log('CSRF token (form hidden from field):' + req.body._csrf);
+	res.redirect(303,'/thank-you');
+});
 //---------普通页面controller---------------
 app.get('/about',function(req,res){
 	// res.type('text/plain');
@@ -80,6 +92,10 @@ app.get('/about',function(req,res){
 		fortune:fortune.getCake(),
 		pageTestScript:'/qa/tests-about.js'
 	});
+});
+app.get('/thank-you',function(req,res){
+	 res.type('text/plain');
+	 res.send('Thanks!');
 })
 
 

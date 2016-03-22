@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "body": "^5.1.0",
+    "body-parser": "^1.15.0",
     "express": "^4.0.0",
     "express3-handlebars": "^0.5.0"
   },
