@@ -36,13 +36,14 @@ app.use(express.static(__dirname + '/public'));
 
 
 // 中间件
+//----------局部-------------
 app.use(function(req,res,next){
 	if(!res.locals.partials) res.locals.partials = {};
 	res.locals.partials.weather = fortune.weather();
 	res.locals.partials.weathers = fortune.weather();
 	next();
 });
-
+//----------表单-------------
 app.use(require('body-parser')());
 
 
@@ -55,12 +56,16 @@ app.get('/',function(req,res){
 	res.render('home');
 });
 
+
+
 //-----段落-页面引用js脚本--------------
 app.get('/jqueryTest',function(req,res){
 	// res.type('text/plain');
 	// res.send('GodKing');
 	res.render('jquerytest');
-})
+});
+
+
 //------hds客户端-动态加载页面内容--------------
 app.get('/nursery-rhyme',function(req,res){
 	res.render('nursery-rhyme');
@@ -75,6 +80,8 @@ app.get('/data/nursery-rhyme',function(req,res){
 	});
 });
 
+
+
 //---------express表单------------------
 app.get('/newsletter',function(req,res){
 	res.render('newsletter',{csrf:'CSRF token goes here'});
@@ -82,8 +89,13 @@ app.get('/newsletter',function(req,res){
 app.post('/process',function(req,res){
 	console.log('From(from querystring):' + req.query.form);
 	console.log('CSRF token (form hidden from field):' + req.body._csrf);
+	console.log('Name:' + req.body.name);
+	console.log('Email:' + req.body.email);
 	res.redirect(303,'/thank-you');
 });
+
+
+
 //---------普通页面controller---------------
 app.get('/about',function(req,res){
 	// res.type('text/plain');
