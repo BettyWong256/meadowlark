@@ -1,6 +1,7 @@
 var express = require('express');
 var http = require('http');
 var fortune = require('./lib/fortune.js');   //相对于npm
+var credentials = require('./credentials.js');
 var app = express();
 
 
@@ -45,6 +46,8 @@ var app = express();
 });
 //----------表单-------------
 	app.use(require('body-parser')());
+//----------cookie-----------
+	app.use(require('cookie-parser')(credentials.cookieSecret));
 
 
 
@@ -54,6 +57,9 @@ var app = express();
 	// res.type('text/plain');
 	// res.send('GodKing');
 	res.render('home');
+	res.cookie('monster','nom nom');
+	res.cookie('signed_monster','nom nom',{signed:true});
+
 });
 
 
