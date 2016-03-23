@@ -1,0 +1,23 @@
+<span class="btn btn-default btn-file">
+    Upload
+    <input type="file" class="form-control" required accept="image/*" id="fieldPhoto" data-url="/upload" multiple name="photo">
+</span>
+<div id="fileUploads"></div>
+
+{{#section 'jquery'}}
+    <script src="js/common/jquery.ui.widget.js"></script>
+    <script src="js/common/jquery.iframe-transport.js"></script>
+    <script src="js/common/jquery.fileupload.js"></script>
+    <script>
+        $(function(){
+            $('#fieldPhoto').fileupload({
+                dataType: 'json',
+                done: function(e,data){
+                    $.each(data.result.files,function(index, file){
+                        $('#fileUploads').append($('<div class="upload">'+'<span class="glyphicon glyphicon-ok"></span>'+'&nbsp;'+file.originalName+'</div>'));
+                    });
+                }
+            });
+        });
+    </script>
+{{/section}}
