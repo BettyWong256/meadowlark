@@ -123,6 +123,8 @@ var app = express();
 		res.redirect(303,'/thank-you');
 	});
 });
+
+
 //-----------jquery上传文件-----------
 	var jqupload= require('jquery-file-upload-middleware');
 	app.use('/jqueryUp',function(req,res){
