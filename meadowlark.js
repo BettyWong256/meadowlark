@@ -55,7 +55,7 @@ var app = express();
 		res.locals.flash = req.session.flash;
 		delete req.session.flash;
 		next();
-	})
+	});
 
 
 // 路由
@@ -151,15 +151,10 @@ var app = express();
 		})(req,res,next)
 	});
 //-----------即显消息-----------------
-	app.use(function(req,res,next){
-		res.locals.flash = req.session.flash;
-		delete req.session.flash;
-		next();
-	})
 	app.post('/newsletter',function(req,res){
 		var name = req.body.name||'';
 		var email = req.body.email||'';
-		if(!name.match(VALID_EMAIL_REGEX)){
+		if(!email.match(VALID_EMAIL_REGEX)){
 			if(req.xhr)	return res.json({error :'Invalid name email address.'});
 			req.session.flash = {
 				type:'danger',
