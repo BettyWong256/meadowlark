@@ -46,10 +46,16 @@ var app = express();
 });
 //----------表单-------------
 	app.use(require('body-parser')());
-//----------cookie-----------
+//----------cookie----------
 	app.use(require('cookie-parser')(credentials.cookieSecret));
-
-
+//----------会话-------------
+	app.use(require('express-session')());
+//----------即显消息----------
+	app.use(function(req,res,next){
+		res.locals.flash = req.session.flash;
+		delete req.session.flash;
+		next();
+	})
 
 
 // 路由
@@ -76,7 +82,6 @@ var app = express();
 	app.get('/nursery-rhyme',function(req,res){
 	res.render('nursery-rhyme');
 });
-
 	app.get('/data/nursery-rhyme',function(req,res){
 	res.json({
 		animal :'squirrel',
@@ -85,8 +90,6 @@ var app = express();
 		noun: 'heck'
 	});
 });
-
-
 
 
 	app.get('/newsletter',function(req,res){
@@ -102,13 +105,13 @@ var app = express();
 //});
 
 //---------处理AJAX表单----------
-	app.post('/process',function(req,res){
-	if(req.xhr || req.accepts('json.html') === 'json'){
-		res.send({success: true});
-	}else{
-		res.redirect(303, '/thank-you');
-	}
-});
+//	app.post('/process',function(req,res){
+//	if(req.xhr || req.accepts('json.html') === 'json'){
+//		res.send({success: true});
+//	}else{
+//		res.redirect(303, '/thank-you');
+//	}
+//});
 
 
 //---------上传文件-------------
@@ -147,7 +150,43 @@ var app = express();
 			},
 		})(req,res,next)
 	});
-
+//-----------即显消息-----------------
+	app.use(function(req,res,next){
+		res.locals.flash = req.session.flash;
+		delete req.session.flash;
+		next();
+	})
+	app.post('/newsletter',function(req,res){
+		var name = req.body.name||'';
+		var email = req.body.email||'';
+		if(!name.match(VALID_EMAIL_REGEX)){
+			if(req.xhr)	return res.json({error :'Invalid name email address.'});
+			req.session.flash = {
+				type:'danger',
+				intro: 'Validation error!',
+				message:'The email address you enterd was not valid',
+			};
+			return res.redirect(303,'/newsletter/archive');
+		}
+		new NewsletterSignup({name:name,email:email}).save(function(err){
+			if(err){
+				if(req.xhr) return res.json({error:'Database error.'});
+				req.session.flash = {
+					type:'danger',
+					intro:'Database error!',
+					message: ' There was a database error,please try again later.'
+				};
+				return res.redirect(303,'/newsletter/archive');
+			}
+			if(req.xhr) return res.json({success:true});
+			req.session.flash = {
+				type: 'success',
+				intro: 'Thank you!',
+				message: 'You have now been signed up for the newsletter.',
+			};
+			return res.redirect(303,'/newsletter/archive');
+		});
+	});
 
 //---------普通页面controller---------------
 	app.get('/about',function(req,res){
